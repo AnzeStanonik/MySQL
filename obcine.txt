@@ -1,0 +1,85 @@
+-- Izpišite vse podatke iz tabele obcine.
+SELECT *
+FROM občine;
+-- Izpišite vse podatke za Kranj.
+SELECT *
+FROM občine
+WHERE ime_občine = "Kranj";
+-- Izpišite vse podatke za Kranj in Ljubljano.
+SELECT *
+FROM občine
+WHERE ime_občine = "Kranj" || ime_občine = "Ljubljana";
+-- Izpišite vse podatke za Kranj, Maribor, Koper, Novo mesto in Jesenice.
+SELECT *
+FROM občine
+WHERE ime_občine IN ("Kranj", "Maribor", "Novo mesto", "Jesenice") || ime_občine LIKE "koper%";
+-- Izpišite imena vseh občin, ki so velike med 100 in 300 km2. Spisek uredite po abecednem vrstnem redu naraščajoče.
+SELECT *
+FROM občine
+WHERE površina < 300 && površina > 100
+ORDER BY ime_občine;
+-- Izpišite imena vseh gorenjskih občin v bazi. Spisek uredite po abecednem vrstnem redu padajoče.
+SELECT *
+FROM občine
+WHERE ime_regije = "gorenjska"
+ORDER BY ime_občine DESC;
+-- Izpišite vse podatke o občinah, katerih ime regije se prične s črko O.
+SELECT *
+FROM občine
+WHERE ime_regije LIKE "o%";
+-- Izpišite vse podatke o občinah, ki imajo v imenu besedo ob.
+SELECT *
+FROM občine
+WHERE ime_regije LIKE "%ob%";
+-- Prikažite ime občine ter število prebivalcev na km2 površine občine. Spisek uredite enkrat padajoče in enkrat naraščajoče po gostoti prebivalstva. Stolpec, ki prikazuje število prebivalcev na km2 poimenuj Gostota prebivalstva.
+SELECT ime_občine, prebivalci/površina AS gostota
+FROM občine
+ORDER BY 2;
+SELECT ime_občine, prebivalci/površina AS gostota
+FROM občine
+ORDER BY 2 desc;
+-- Prikažite gostoto prebivalstva za Kranj. V glavi stolpca naj piše: Gostota prebivalstva za Kranj.
+SELECT prebivalci/površina AS "Gostota prebivalstva za Kranj"
+FROM občine
+WHERE ime_občine = "Kranj";
+-- Prikažite ime občine in neto plačo na prebivalca. Spisek naj bo urejen naraščajoče po neto plači na prebivalca. Stolpec v katerem je prikazan izračunana vrednost naj se imenuje: neto plača na prebivalca.
+SELECT ime_občine, neto_plača_na_zaposlenega*zaposlene_osebe/prebivalci AS "neto plača na prebivalca"
+FROM občine
+ORDER BY 2;
+-- Stolpcu dajte ime Število gorenjskih občin v bazi in izpišite podatke o številu občina pri katerih je kot regija navedena Gorenjska.
+SELECT COUNT(*) AS "Število gorenjskih občin v bazi"
+FROM občine
+WHERE ime_regije = "gorenjska";
+-- Koliko je občin z več kot 10000 prebivalcev.
+SELECT COUNT(*) AS "občin z več kot 10000 prebivalcev"
+FROM občine
+WHERE prebivalci > 10000;
+-- Koliko je skupno število prebivalcev v občinah, ki so v bazi.
+SELECT sum(prebivalci) AS "število prebivalcev v občinah"
+FROM občine;
+-- Koliko je skupno število prebivalcev v gorenjski regiji.
+SELECT sum(prebivalci) AS "število prebivalcev v orenjski regiji"
+FROM občine
+WHERE ime_regije = "gorenjska";
+-- Prikažite skupno število prebivalcev za posamezno regijo. Seznam naj bo urejen padajoče po skupnem številu prebivalcev.
+SELECT ime_regije, sum(prebivalci) AS "število prebivalcev v orenjski regiji"
+FROM občine
+GROUP by ime_regije
+ORDER BY 2 desc;
+-- Prikažite vse regije, ki imajo več kot 200000 prebivalcev.
+-- Prikažite skupno število prebivalcev in gostoto prebivalstva na km2 za posamezno regijo. Seznam naj bo urejen padajoče po skupnem gostoti prebivalcev.
+-- 
+-- Prikažite imena občin in skupen prihodek za prvih 10 najbogatejših občin.
+-- Prikažite imena občin in skupen prihodek za prvih 10% najbogatejših občin.
+-- Prikažite skupen prihodek po regijah. Spisek naj bo urejen po skupnem prihodku padajoče.
+-- Izpišite ime regije in površino najmanjše občine za Gorenjsko, Koroško, Pomursko in Zasavsko.
+-- Izpišite občine in njihove površine za vse občine v bazi, pri katerih je površina za 50% manjša ali večja kot je površina Kranjske občine.
+-- 
+-- Izpišite občini v katerih je največja razlika po številu moških in žensk. 
+-- Izpišite prvih pet občin z največjo gostoto otrok v vrtcih.
+-- V kateri občini je največji odstotek brezposelnih oseb?
+-- V kateri regiji je največji odstotek brezposelnih oseb?
+-- Ali je v kateri občini več študentov kot dijakov in tudi več dijakov kot učencev?
+-- Zanimajo nas občine, ki imajo več stanovanj kot avtomobilov.
+-- 
+-- 
