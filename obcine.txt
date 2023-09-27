@@ -67,14 +67,46 @@ FROM občine
 GROUP by ime_regije
 ORDER BY 2 desc;
 -- Prikažite vse regije, ki imajo več kot 200000 prebivalcev.
+SELECT ime_regije, SUM(prebivalci)
+FROM občine
+GROUP BY ime_regije
+HAVING SUM(prebivalci) > 200000
+ORDER BY 2 DESC;
 -- Prikažite skupno število prebivalcev in gostoto prebivalstva na km2 za posamezno regijo. Seznam naj bo urejen padajoče po skupnem gostoti prebivalcev.
--- 
+SELECT ime_regije, SUM(prebivalci), SUM(prebivalci)/SUM(površina) AS gostota
+FROM občine
+GROUP BY ime_regije
+ORDER BY 3 DESC;
 -- Prikažite imena občin in skupen prihodek za prvih 10 najbogatejših občin.
+SELECT ime_občine, prihodek_podjetij_1000
+FROM občine
+ORDER BY 2 DESC
+LIMIT 10;
 -- Prikažite imena občin in skupen prihodek za prvih 10% najbogatejših občin.
+prepare stavek FROM 'SELECT ime_občine, prihodek_podjetij_1000
+FROM občine
+ORDER BY 2 desc
+LIMIT ?;'
+SET @X=(SELECT Max(id_občine) div 10
+FROM občine)
+EXECUTE stavek USING @X;
 -- Prikažite skupen prihodek po regijah. Spisek naj bo urejen po skupnem prihodku padajoče.
+SELECT ime_regije, sum(prihodek_podjetij_1000)
+FROM občine
+GROUP BY ime_regije
+ORDER BY 2 DESC;
 -- Izpišite ime regije in površino najmanjše občine za Gorenjsko, Koroško, Pomursko in Zasavsko.
+SELECT ime_regije, ime_občine, površina
+FROM občine
+WHERE (ime_regije, površina) IN
+(SELECT ime_regije, MIN(površina) 
+FROM občine
+WHERE ime_regije IN ('Gorenjska', 'Koroška', 'Pomurska', 'Zasavska')
+GROUP BY ime_regije);
 -- Izpišite občine in njihove površine za vse občine v bazi, pri katerih je površina za 50% manjša ali večja kot je površina Kranjske občine.
--- 
+SELECT ime_občine, površina`občine`
+FROM občine
+WHERE površina < površina(kranj)/2;
 -- Izpišite občini v katerih je največja razlika po številu moških in žensk. 
 -- Izpišite prvih pet občin z največjo gostoto otrok v vrtcih.
 -- V kateri občini je največji odstotek brezposelnih oseb?
