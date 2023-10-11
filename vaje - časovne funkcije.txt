@@ -1,0 +1,26 @@
+-- Razvrstite osebe od najstarejše do najmlajše.
+SELECT *
+FROM rojstni_dnevi
+GROUP BY rojstni_dan asc;
+-- Izpišite dve najmlajši ženski in dva najstarejša moška.
+(SELECT *
+FROM rojstni_dnevi
+WHERE spol = 'Ž'
+GROUP BY rojstni_dan desc LIMIT 2)
+union
+(SELECT *
+FROM rojstni_dnevi
+WHERE spol = 'M'
+GROUP BY rojstni_dan asc LIMIT 2);
+-- Izpišite vse, ki bodo imeli rojstni dan v naslednjih 90 dneh.
+SELECT *
+FROM rojstni_dnevi
+WHERE select day(CURDATE())
+-- Poiščite vse, ki so stari med 10000 in 20000 dnevi.
+-- Poiščite vse, ki so rojeni med drugo svetovno vojno in niso rojeni meseca septembra. (1939-09-01 do 1945-09-02)
+-- Koliko oseb je rojenih v posameznem mesecu?
+-- Izpišite mesece, v katerih je bilo rojeno vsaj sedem oseb.
+-- Izpišite vse pare oseb, ki so bili rojeni manj kot 15 dni narazen.
+-- Izpišite vse pare oseb, katerih rojstni dnevi se razlikujejo za manj kot 5 dni.
+-- Koliko dni ste stari vi?
+-- Izpiši vse, ki so bili rojeni v petek trinajstega.
