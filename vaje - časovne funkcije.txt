@@ -13,14 +13,46 @@ FROM rojstni_dnevi
 WHERE spol = 'M'
 GROUP BY rojstni_dan asc LIMIT 2);
 -- Izpišite vse, ki bodo imeli rojstni dan v naslednjih 90 dneh.
-SELECT *
+SELECT *, MAKEDATE(2023 ,DAYOFYEAR(rojstni_dan))
 FROM rojstni_dnevi
-WHERE select day(CURDATE())
+WHERE datediff(rojstni_dan, CURDATE()) < 90 ;
+
+SELECT * if day
 -- Poiščite vse, ki so stari med 10000 in 20000 dnevi.
+SELECT *, DATEDIFF(CURDATE(), rojstni_dan)
+FROM rojstni_dnevi
+#WHERE ((day(CURDATE()) + MONTH(CURDATE())*30 + YEAR(CURDATE())*365) - (day(rojstni_dan) + MONTH(rojstni_dan)*30 + YEAR(rojstni_dan)*365)) > 10000 AND ((day(CURDATE()) + MONTH(CURDATE())*30 + YEAR(CURDATE())*365) - (day(rojstni_dan) + MONTH(rojstni_dan)*30 + YEAR(rojstni_dan)*365)) < 20000
+WHERE DATEDIFF(CURDATE(), rojstni_dan) BETWEEN 10000 AND 20000
+ORDER BY 6 ASC;
 -- Poiščite vse, ki so rojeni med drugo svetovno vojno in niso rojeni meseca septembra. (1939-09-01 do 1945-09-02)
+SELECT *
+FROM rojstni_dnevi;
+#WHERE (year(rojstni_dan) > 1938 AND MONTH(rojstni_dan) > 9 )  AND (YEAR(rojstni_dan) < 1946  and MOnth(rojstni_dan) < 9); 
+#WHERE date(rojstni_dan) BETWEEN DATE('1939-10-0') AND DATE('1945-8-31');
+#WHERE year(DATEDIFF((CURDATE() , 1939-10-01))) BETWEEN 78 and 83;
 -- Koliko oseb je rojenih v posameznem mesecu?
+SELECT month(rojstni_dan), COUNT(*)
+FROM rojstni_dnevi
+GROUP BY month(rojstni_dan)
+order BY month(rojstni_dan);
 -- Izpišite mesece, v katerih je bilo rojeno vsaj sedem oseb.
+SELECT month(rojstni_dan), COUNT(*)
+FROM rojstni_dnevi
+GROUP BY month(rojstni_dan)
+HAVING COUNT(*)>= 7;
 -- Izpišite vse pare oseb, ki so bili rojeni manj kot 15 dni narazen.
+SELECT *
+FROM rojstni_dnevi r1, rojstni_dnevi r2
+WHERE abs(DATEDIFF(r1.rojstni_dan, r2.rojstni_dan)) < 15 
+AND r1.id  < r2.id;
 -- Izpišite vse pare oseb, katerih rojstni dnevi se razlikujejo za manj kot 5 dni.
+SELECT * 
+FROM rojstni_dnevi r1, rojstni_dnevi r2
+WHERE DAY(r1.rojstni_dan) - DAY(r2.rojstni_dan) < 5
+AND DAY(r1.rojstni_dan) >= DAY(r2.rojstni_dan)
+AND r1.id  < r2.id;
 -- Koliko dni ste stari vi?
 -- Izpiši vse, ki so bili rojeni v petek trinajstega.
+SELECT *
+FROM rojstni_dnevi
+WHERE DAY(rojstni_dan) = 13 AND DAYOFWEEK(rojstni_dan) = 6;#dayname(friday)
