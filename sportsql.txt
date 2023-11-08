@@ -1,0 +1,105 @@
+Odgovorite na naslednja vprašanja!
+
+Izpišite priimek, ime in oddelek za vse zaposlene. Izpis uredi naraščajoče po abecednem redu priimkov zaposlenih
+;
+SELECT z.Priimek , z.Ime , o.Oddelek
+FROM zaposleni z JOIN oddelki o
+ON z.ID_Oddelek = o.ID_Oddelek
+ORDER BY z.Priimek;
+Izpišite priimke, imena in telefonske številke delavcev, ki delajo v oddelku Dodelava
+;
+SELECT Priimek, Ime , Telefon
+FROM zaposleni z JOIN oddelki o
+ON z.ID_Oddelek = o.ID_Oddelek
+WHERE o.Oddelek = 'Dodelava';
+V katerem oddelku dela Kovač Anton?
+;
+SELECT o.Oddelek
+FROM zaposleni z JOIN oddelki o
+ON z.ID_Oddelek = o.ID_Oddelek
+WHERE z.Ime = 'Anton' AND z.priimek = 'Kovač';
+Koliko ljudi je zaposlenih v oddelku Servis?
+;
+SELECT COUNT(*)
+FROM zaposleni z JOIN oddelki o
+ON z.ID_Oddelek = o.ID_Oddelek
+WHERE o.Oddelek = 'Servis';
+Izpišite imena oddelkov in število zaposlenih v posameznem oddelku.
+;
+SELECT o.Oddelek, COUNT(*)
+FROM zaposleni z JOIN oddelki o
+ON z.ID_Oddelek = o.ID_Oddelek
+GROUP BY o.Oddelek;
+Izpišite vse izdelke in njihove cene iz skupine Nahrbtniki.
+;
+SELECT i.Izdelek, i.Cena
+FROM izdelki i JOIN kategorije k
+ON i.ID_Kategorija = k.ID_Kategorija
+WHERE k.Kategorija = 'Nahrbtniki';
+Izpišite kategorije in število izdelkov v posamezni kategoriji.
+;
+SELECT k.Kategorija, COUNT(*)
+FROM izdelki i JOIN kategorije k
+ON i.ID_Kategorija = k.ID_Kategorija
+GROUP BY k.Kategorija;
+Izpišite datume vseh naročil za stranko Zdravje.
+;
+SELECT n.Datum
+FROM narocilo n JOIN stranke s
+ON n.ID_Stranka = s.ID_Stranka
+WHERE s.Ime = 'Zdravje';
+Koliko naročil je bilo izvedenih za stranko Zdravje?
+;
+SELECT COUNT(*)
+FROM narocilo n JOIN stranke s
+ON n.ID_Stranka = s.ID_Stranka
+WHERE s.Ime = 'Zdravje'; 
+Izpišite število naročil po posameznih strankah. Spisek naj bo urejen padajoče po številu naročil.
+;
+SELECT s.Ime, count(*)
+FROM narocilo n JOIN stranke s
+ON n.ID_Stranka = s.ID_Stranka
+GROUP BY s.ID_Stranka;
+Izpišite ime in priimek in število obdelanih naročil zaposlenega, ki je obdelal največ naročili.
+;
+SELECT z.Ime, z.Priimek, COUNT(n.ID_Narocilo) 
+FROM narocilo n JOIN zaposleni z
+ON n.ID_Zaposleni = z.ID_Zaposleni
+GROUP BY n.ID_Zaposleni
+ORDER BY COUNT(n.ID_Narocilo) DESC
+LIMIT 1;
+Izpišite številke naročil, ki so bila obdelana 22.3.2002.
+;
+SELECT COUNT(*)
+FROM narocilo
+WHERE Datum = '2002-3-22';
+Izpišite izdelke, količine in cene za naročilo, ki je bilo dne 3.1.2002 obdelano za stranko V naravo d.o.o..
+;
+SELECT i.Izdelek, nd.Kolicina, nd.Cena
+FROM narocilo n JOIN narocilodetajl nd
+ON n.ID_Narocilo = nd.ID_Narocilo
+JOIN izdelki i
+ON nd.ID_Izdelek = i.ID_Izdelek
+JOIN stranke s
+ON n.ID_Stranka =  s.ID_Stranka
+WHERE n.Datum = '2002-1-3' AND s.Ime = 'V naravo d.o.o.';
+
+Pripravite poizvedbo, ki pripravi račun za naročilo 10622. V poizvedbo vključi Izdelek, Količino, Ceno, Znesek (produkt cene in količine)
+;
+SELECT *
+FROM narocilo n JOIN narocilodetajl nd
+ON n.ID_Narocilo = nd.ID_Narocilo
+JOIN izdelki i 
+ON i.ID_Izdelek = nd.ID_Izdelek 
+WHERE n.ID_Narocilo = 10622
+;
+Pripravite poizvedbo, ki pripravi povzetek računa za naročilo 10622. Na povzetku naj bo znesek, ki je osnova za DDV, znesek DDV (20%) in skupni znesek računa in ime Stranke.
+Prikažite skupni promet po strankah. Spisek naj bo urejen padajoče po prometu.
+Prikažite ime stranke in promet za najboljše tri stranke, ki so leta 2002 opravile največ prometa. Namig: WHERE YEAR(Datum) = 2002
+Izpišite imena izdelkov, cene in povprečno ceno izdelkov.
+Katere enake izdelke sta kupili stranki Zagon in Aktiva d.o.o.?
+Katere izdelke je kupila stranka Zagon, ne pa tudi Aktiva d.o.o.?
+Z izdelki katere kategorije je bilo opravljenega največ prometa? Koliko?
+Kateri zaposleni (priimek in ime) imajo opravka s strankami?
+Kateri zaposleni v oddelku Prodaja ne delajo z nobeno stranko?
+Izpišite ime in priimek zaposlenega in ime stranke s katero sodeluje, če zaposleni ne sodeluje z nobeno stranko se v izpisu vidi Null.
